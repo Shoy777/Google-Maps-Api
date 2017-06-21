@@ -1,0 +1,53 @@
+﻿body {
+    background-color: #f1f1f1;
+    font-family: 'Josefin Sans',san-serif;
+}
+
+.well-bg {
+    background-color: #fff;
+    color: #555;
+    border: 0;
+}
+.well .well{margin-bottom:10px;}
+.jumbotron {
+    background-color: #fff;
+    color: #555;
+    margin-top: 10px;
+}
+
+.btnDate {
+    cursor: pointer;
+}
+
+#mapa, #map, [id*="map"] {
+    height: 100%;
+    width: 100%;
+}
+
+.container-mapa {
+    height: 250px;
+}
+.border-left {
+    border-left: 1px solid #000;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.block{
+    display:block;
+    font-weight:700;
+}
+.alert-danger{
+    line-height: 30px;
+}
+.alert-success{
+    line-height: 50px;
+}
+.alert-success,
+.alert-danger{
+    display:block;
+    text-align: center;
+    border-radius:4px;
+    margin:5px 0;
+}

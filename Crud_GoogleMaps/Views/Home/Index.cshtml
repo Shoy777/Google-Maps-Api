@@ -1,0 +1,123 @@
+﻿@model Crud_GoogleMaps.Models.Persona
+@{
+    ViewBag.Title = "Home Page";
+    List<Crud_GoogleMaps.Models.Persona> personas = ViewBag.Listado;
+}
+
+<div class="jumbotron">
+    <h1 class="text-center">Crud + Google Maps</h1>
+    <h4>Hay @personas.Count Personas registradas</h4>
+</div>
+<div class="col-sm-12 well well-bg">
+    <div class="col-sm-12 form-group">
+        <h2>@ViewBag.Crud</h2>
+    </div>
+    <div class="col-sm-12 form-group">
+        <h4 class="alert-success">@ViewBag.Message</h4>
+    </div>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "frm-crud" }))
+    {
+
+    <div class="col-sm-6 well-bgs well">
+        <div class="form-group">
+            @Html.HiddenFor(model => model.Id, new { @class = "form-control", @placeholder = "Ingrese Id" })
+            <label for="nombre">Nombre</label>
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Ingrese Nombre" })
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "alert-danger" })
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido</label>
+            @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control", @placeholder = "Ingrese Apellido" })
+            @Html.ValidationMessageFor(model => model.Apellido, null, new { @class = "alert-danger" })
+        </div>
+        <div class="form-group">
+            <label for="FechaNacimiento">Fecha de Nacimiento</label>
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control fecha", @placeholder = "Seleccione Fecha Nacimiento", @readonly = "" })
+                <span class="input-group-addon btnDate">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </div>
+            @Html.ValidationMessageFor(model => model.FechaNacimiento, null, new { @class = "alert-danger" })
+        </div>
+        <div class="form-group">
+            <input type="submit" class="form-control btn btn-success" value="Guardar" />
+        </div>
+        
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group well">
+            <label for="direccion">Seleccione una Ubicación</label>
+            @Html.HiddenFor(model => model.CX, new { @class = "form-control", @placeholder = "Seleccione una ubicación", @readonly = "" })
+            @Html.HiddenFor(model => model.CY, new { @class = "form-control", @placeholder = "Seleccione una ubicación", @readonly = "" })
+            @Html.ValidationMessageFor(model => model.CX, null, new { @class = "alert-danger" })
+            <div class="container-mapa">
+                <div id="mapa"></div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+<div class="col-sm-12 well well-bg">
+    
+    <h2>Listado de Personas</h2>
+    <div class="col-sm-12">
+        <div class="well clearfix">
+            @foreach (var i in personas)
+            {
+               <div class="well col-sm-12">
+                   <div class="col-sm-4">
+                       <div class="form-group">
+                           <span class="block">Nombre</span>
+                           <span>@i.Nombre</span>
+                       </div>
+                       <div class="form-group">
+                           <span class="block">Apellido</span>
+                           <span>@i.Apellido</span>
+                       </div>
+                       <div class="form-group">
+                           <span class="block">Fecha de Nacimiento</span>
+                           <span>@i.FechaNacimiento.Day/@i.FechaNacimiento.Month/@i.FechaNacimiento.Year</span>
+                       </div>
+                       <div class="form-group">
+                           <a class="btn btn-default" href="~/home/index/@i.Id" title="Editar">
+                               <i class="fa fa-pencil"></i>
+                           </a>
+                           <a class="btn btn-danger" href="~/home/delete/@i.Id" title="Eliminar">
+                               <i class="fa fa-trash"></i>
+                           </a>
+                       </div>
+                   </div>
+                   <div class="col-sm-8">
+                       <div class="form-group">
+                           <span class="block">Dirección</span>
+                           <div class="container-mapa">
+                               <div id="map_@i.Id"></div>
+                           </div>
+                           <script>
+                                   var punto = new google.maps.LatLng(@i.CX, @i.CY);
+                                   var config = {
+                                       zoom: 14,
+                                       center: punto,
+                                       mapTypeId: google.maps.MapTypeId.ROADMAP
+                                   };
+                                   var image = '/Content/img/marker.png';
+                                   var mapa = new google.maps.Map($("#map_@i.Id")[0], config);
+                                   var marcador = new google.maps.Marker({
+                                       position: punto,
+                                       map: mapa,
+                                       icon: image
+                                   });
+                                   var infowindow = new google.maps.InfoWindow({
+                                       content: "Vivo Aquí"
+                                   });
+                                   infowindow.open(mapa, marcador);
+                                   marcador.setMap(mapa);
+                           </script>
+                       </div>
+                   </div>
+               </div>
+            }
+        </div>
+    </div>
+</div>
